@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap');
+
+body {
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Rubik', sans-serif;
+}
+
+.navbar-container {
+    background-color: white;
+    max-height: 16vh;
+    border-bottom: 3px solid #dddddd;
+    position: relative;
+    z-index: 10;
+}
+.navbar-container nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;  
+}
+
+.navbar-container nav ul {
+    display: flex;
+    align-items: center;
+    padding-right: 10rem ;
+}
+
+.navbar-container nav ul li{
+    padding: 0.3rem 5rem;
+    font-size: 2rem;
+}
+
+.logo {
+    aspect-ratio: 1/1;
+    width: 15vh;
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+  color: #000;
+}
+
+.hover-underline-animation:hover{
+    cursor: pointer;
+}
+
+.hover-underline-animation:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom;
+  cursor: pointer;
+}
+
+#tutorial{
+    display: block;
+    width: 100px;
+    height: 50px;
+    background-color: red;
+}
+.chmurki{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0.5;
+}
+.chmurki img{
+    position: fixed;
+    height: 50%;
+    max-width: 80%;
+    animation: chmurki calc(25s * var(--i)) alternate infinite;
+}
+@keyframes chmurki{
+0%{
+    transform: translate(-100%);
+    /* transform: translateY(100%);     */
+}
+50%{
+    transform: translate(350%);
+    /* transform: translateY(120%); */
+}
+100%{
+    transform: translate(-150%);
+    /* transform: translateY(1100%); */
+    transform: rotate(1deg);
+}
+}
+#game{
+    width: 100%;
+    height: 84vh;
+    background-image: url("../Textures/platformywektorusia.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    position: relative;
+    z-index: -1;
+}
