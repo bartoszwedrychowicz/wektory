@@ -1,0 +1,98 @@
+
+// function findPath(grid) {
+//     let row = grid.length;
+//     let col = grid[0].length;
+  
+//     let start = [0, 0];
+//     let end = [0, 0];
+//     let foundStart = false;
+//     let foundEnd = false;
+    
+//     // find start and end positions
+//     for (let i = 0; i < row; i++) {
+//       for (let j = 0; j < col; j++) {
+//         if (grid[i][j] === 4) {
+//           start = [i, j];
+//           foundStart = true;
+//         } else if (grid[i][j] === 3) {
+//           end = [i, j];
+//           foundEnd = true;
+//         }
+//         if (foundStart && foundEnd) break;
+//       }
+//       if (foundStart && foundEnd) break;
+//     }
+  
+//     // array to keep track of visited cells
+//     let visited = [];
+//     for (let i = 0; i < row; i++) {
+//       visited[i] = [];
+//       for (let j = 0; j < col; j++) {
+//         visited[i][j] = false;
+//       }
+//     }
+  
+//     // queue to store cells to be processed
+//     let queue = [];
+//     queue.push(start);
+//     visited[start[0]][start[1]] = true;
+  
+//     // arrays to store row and column indices of the 4-adjacent cells
+//     let rowNbr = [-1, 0, 0, 1];
+//     let colNbr = [0, -1, 1, 0];
+  
+//     while (queue.length) {
+//       let curr = queue.shift();
+//       let x = curr[0];
+//       let y = curr[1];
+  
+//       if (x === end[0] && y === end[1]) return true; // path found
+  
+//       // explore all 4-adjacent cells
+//       for (let k = 0; k < 4; k++) {
+//         let nextRow = x + rowNbr[k];
+//         let nextCol = y + colNbr[k];
+//         if (nextRow >= 0 && nextRow < row && nextCol >= 0 && nextCol < col && !visited[nextRow][nextCol]) {
+//           queue.push([nextRow, nextCol]);
+//           visited[nextRow][nextCol] = true;
+         
+//         }
+//       }
+//     }
+//     return false; // no path found
+//   }
+  
+//   let grid = [  
+//     [0, 0, 0, 0, 4, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 3, 0, 0, 0, 0]
+//   ];
+  
+//   console.log(findPath(grid)); // Output: true
+
+
+function generateRandomPath(array, startRow, startCol, endRow, endCol) {
+  let path = [];
+  let currentRow = startRow;
+  let currentCol = startCol;
+
+  while (currentRow !== endRow || currentCol !== endCol) {
+    path.push([currentRow, currentCol]);
+    let direction = Math.floor(Math.random() * 4);
+    if (direction === 0 && currentRow > 0) {
+      currentRow--;
+    } else if (direction === 1 && currentRow < array.length - 1) {
+      currentRow++;
+    } else if (direction === 2 && currentCol > 0) {
+      currentCol--;
+    } else if (direction === 3 && currentCol < array[0].length - 1) {
+      currentCol++;
+    }
+  }
+  path.push([endRow, endCol]);
+  console.table(path);
+  return path;
+}
+generateRandomPath(map, 8, 4, 0, 4);
