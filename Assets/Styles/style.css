@@ -3,6 +3,19 @@ body {
   height: 100vh;
   width: 100vw;
   font-family: "Rubik", sans-serif;
+  user-select: none;
+}
+/* usunięcie strzałek przy inpucie(number) */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .navbar-container {
@@ -99,8 +112,10 @@ body {
 }
 .gameBoard {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 
 .grid-container {
@@ -110,19 +125,168 @@ body {
 }
 
 .grid-item {
-  background-color: red;
   border: 1px solid black;
   width: 65px;
   height: 65px;
+  background-color: #1452d5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%2307adfc' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
 }
 
-.gameBoard{
-  margin-top: 30px;
-}
-
-.coin{
+.coin {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  position: relative;
+  z-index: 10;
+}
+
+.game-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.moves,
+.panel {
+  width: 20%;
+  height: 70vh;
+  border: #dddddd 5px solid;
+  margin: 2.4rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.moves h3 {
+  padding: 2.4rem;
+  font-size: 3rem;
+}
+
+.moves ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.moves .moves-list .moves-list-item {
+  padding: 0.1rem 6rem;
+}
+
+li hr {
+  opacity: 0.8;
+  width: 100%;
+}
+
+.panel{
+
+}
+
+.panel h3 {
+  text-align: center;
+  padding: 2.4rem;
+  padding-bottom: 1.1rem;
+  font-size: 2rem;
+}
+
+.button {
+  appearance: button;
+  background-color: #1899d6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+  margin-top: 20px;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 80%;
+}
+
+.button:after {
+  background-clip: padding-box;
+  background-color: #1cb0f6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.button:main,
+.button:focus {
+  user-select: auto;
+}
+
+.button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+
+.button:disabled {
+  cursor: auto;
+}
+
+input[type="number"] {
+  padding: 10px;
+  border: 2px solid #eee;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius:10px;
+  font-family:inherit;
+  font-size: inherit;
+}
+
+input[type="number"]:focus{
+  outline: none;
+}
+
+.input-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+select {
+  padding: 10px;
+  border: 2px solid #eee;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius:10px;
+  font-family:inherit;
+  font-size: inherit;
+  margin-right: 10px;
 }
