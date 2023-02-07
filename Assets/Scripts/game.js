@@ -30,17 +30,19 @@ Jak przygotować?
 
 const confirmBtn = document.getElementById("confirm");
 const startGameBtn = document.getElementById("start");
-const game = document.getElementById("game");
 const moves = document.getElementById("moves");
+const game = document.getElementById("game");
+const points = document.getElementById("points");
+const message = document.getElementById("message");
 const timer = document.getElementById("timer");
-const playerStartPos = 45;
+const panel = document.getElementsByClassName("panel")[0];
 const startPos = document.getElementById(playerStartPos);
-const orders = [];
+const playerStartPos = 45;
 
+const coinCount = 7;
 let direction = document.getElementById("direction").value;
 let number = document.getElementById("number");
-let numberValue = number.value;
-let count = 90;
+let numberValue = parseInt(number.value);
 
 // blokada wpisywania liczb ujemnych i 0
 number.oninput = function () {
@@ -49,86 +51,118 @@ number.oninput = function () {
   }
 };
 
-//Generowanie Coinów
-const pointsCount = Math.floor(Math.random() * 7) + 1;
-for (let i = 0; i < pointsCount; i++) {
-  const imageEl = document.createElement("img");
-  imageEl.src = "Assets/Textures/coin.png";
-  imageEl.classList.add("coin");
-  let random = Math.floor(Math.random() * 100) + 1;
-  document.getElementById(random).appendChild(imageEl);
-}
-
-//Generowanie Wektorusia
-const WektorusEl = document.createElement("img");
-WektorusEl.src = "Assets/Textures/wektorus.png";
-WektorusEl.classList.add("player");
-startPos.appendChild(WektorusEl);
-
-// Dodawanie poleceń i usuwanie ich z listy
-confirmBtn.addEventListener("click", () => {
-  let direction = document.getElementById("direction").value;
-  let numberValue = parseInt(document.getElementById("number").value);
-  if (numberValue <= 0) {
-    numberValue = 1;
-  }
-  let order = [direction, numberValue];
-  orders.push(order);
-  const ListEl = document.createElement("li");
-  const hrEl = document.createElement("hr");
-  ListEl.classList.add("moves-list-item");
-
-  //Spagheti code dla Gabrysia
-  switch (direction) {
-    case "1":
-      ListEl.innerText = numberValue + " 🡡";
-      break;
-    case "2":
-      ListEl.innerText = numberValue + " 🡥";
-      break;
-    case "3":
-      ListEl.innerText = numberValue + " 🡢";
-      break;
-    case "4":
-      ListEl.innerText = numberValue + " 🡦";
-      break;
-    case "5":
-      ListEl.innerText = numberValue + " 🡣";
-      break;
-    case "6":
-      ListEl.innerText = numberValue + " 🡧";
-      break;
-    case "7":
-      ListEl.innerText = numberValue + " 🡠";
-      break;
-    case "8":
-      ListEl.innerText = numberValue + " 🡤";
-      break;
-
-    default:
-      ListEl.innerText = numberValue + "🡡";
-      break;
-  }
-
-  //Usuwanie poleceń
-  ListEl.addEventListener("click", (e) => {
-    let target = e.target;
-    target.remove();
-  });
-  ListEl.appendChild(hrEl);
-  moves.appendChild(ListEl);
-});
-
 //Mechanika odczytywania polecen dla wektorusia
-startGameBtn.addEventListener('click', () => {
-  let counter = setInterval(() => {
-    count = count - 1;
-    if (count <= 0) {
-      clearInterval(counter);
-      return;
+const changeGameState = (state) => {
+  if (state == 1) {
+    startGameBtn.disabled = true;
+
+    //Generowanie Coinów
+    const pointsCount = Math.floor(Math.random() * coinCount) + 1;
+    for (let i = 0; i < pointsCount; i++) {
+      const imageEl = document.createElement("img");
+      imageEl.src = "Assets/Textures/coin.png";
+      imageEl.classList.add("coin");
+      let random = Math.floor(Math.random() * 100) + 1;
+      document.getElementById(random).appendChild(imageEl);
     }
+
+    //Generowanie Wektorusia
+    const WektorusEl = document.createElement("img");
+    WektorusEl.src = "Assets/Textures/wektorus.png";
+    WektorusEl.setAttribute("id", "player");
+    WektorusEl.classList.add("player");
+    const killHimNow = new Event("killhim");
+    WektorusEl.addEventListener("killhim", (e) => {
+      let target = e.target;
+      target.remove();
+    });
+    startPos.appendChild(WektorusEl);
+
+    // Dodawanie poleceń i usuwanie ich z listy
+
+    confirmBtn.disabled = false;
+    confirmBtn.addEventListener("click", () => {
+      if (numberValue <= 0 || numberValue == "" || isNaN(numberValue)) {
+        numberValue = 1;
+      }
+      const ListEl = document.createElement("li");
+      const hrEl = document.createElement("hr");
+      ListEl.classList.add("moves-list-item");
+      number.value = "";
+      //Spagheti code dla Gabrysia
+      switch (direction) {
+        case "1":
+          ListEl.innerText = numberValue + " 🡡";
+          break;
+        case "2":
+          ListEl.innerText = numberValue + " 🡥";
+          break;
+        case "3":
+          ListEl.innerText = numberValue + " 🡢";
+          break;
+        case "4":
+          ListEl.innerText = numberValue + " 🡦";
+          break;
+        case "5":
+          ListEl.innerText = numberValue + " 🡣";
+          break;
+        case "6":
+          ListEl.innerText = numberValue + " 🡧";
+          break;
+        case "7":
+          ListEl.innerText = numberValue + " 🡠";
+          break;
+        case "8":
+          ListEl.innerText = numberValue + " 🡤";
+          break;
+
+        default:
+          ListEl.innerText = numberValue + "🡡";
+          break;
+      }
+      const player = document.getElementById("player")
+      const rodzicWektorusia = player.parentElement
+      const xWektorusia = rodzicWektorusia.dataset.row;
+      const yWektorusia = rodzicWektorusia.dataset.column;
+      console.log(yWektorusia);
+      console.log(xWektorusia);
+
+      //Usuwanie poleceń
+      ListEl.addEventListener("click", (e) => {
+        let target = e.target;
+        target.remove();
+      });
+
+      ListEl.append(hrEl);
+      moves.appendChild(ListEl);
+    });
+    let count = 100;
     timer.innerText = count + " sekund pozostało";
-  }, 1000); // 1000 millisekund = 1 sekunda
-
-
-});
+    timer.classList.remove("hide");
+    message.innerHTML = "";
+    let playerPoints = 0;
+    let counter = setInterval(() => {
+      count = count - 1;
+      if (count < 0) {
+        clearInterval(counter);
+        return;
+      } else if (count == 0) {
+        timer.classList.toggle("hide");
+        confirmBtn.disabled = true;
+        startGameBtn.disabled = false;
+        WektorusEl.dispatchEvent(killHimNow);
+        const coins = document.querySelectorAll(".coin");
+        for (i of coins) {
+          i.remove();
+        }
+        const movesList = document.querySelectorAll(".moves-list-item");
+        for(m of movesList){
+          m.remove();
+        }
+        message.innerHTML =
+          "Koniec Gry <br> Uzyskałeś " + playerPoints + " punktów";
+      }
+      timer.innerText = count + " sekund pozostało";
+    }, 1000); // 1000 millisekund = 1 sekunda
+  }
+};
