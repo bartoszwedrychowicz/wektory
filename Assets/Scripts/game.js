@@ -27,7 +27,7 @@ Jak przygotować?
 
     Makaron ugotuj al dente, podawaj go z sosem, serem, i bazylią.
 */
-
+const playerStartPos = 45;
 const confirmBtn = document.getElementById("confirm");
 const startGameBtn = document.getElementById("start");
 const moves = document.getElementById("moves");
@@ -37,7 +37,7 @@ const message = document.getElementById("message");
 const timer = document.getElementById("timer");
 const panel = document.getElementsByClassName("panel")[0];
 const startPos = document.getElementById(playerStartPos);
-const playerStartPos = 45;
+
 
 const coinCount = 7;
 let direction = document.getElementById("direction").value;
@@ -82,13 +82,16 @@ const changeGameState = (state) => {
 
     confirmBtn.disabled = false;
     confirmBtn.addEventListener("click", () => {
+      let direction = document.getElementById("direction").value;
+let number = document.getElementById("number");
+let numberValue = parseInt(number.value);
       if (numberValue <= 0 || numberValue == "" || isNaN(numberValue)) {
         numberValue = 1;
       }
       const ListEl = document.createElement("li");
       const hrEl = document.createElement("hr");
       ListEl.classList.add("moves-list-item");
-      number.value = "";
+      
       //Spagheti code dla Gabrysia
       switch (direction) {
         case "1":
@@ -120,12 +123,6 @@ const changeGameState = (state) => {
           ListEl.innerText = numberValue + "🡡";
           break;
       }
-      const player = document.getElementById("player")
-      const rodzicWektorusia = player.parentElement
-      const xWektorusia = rodzicWektorusia.dataset.row;
-      const yWektorusia = rodzicWektorusia.dataset.column;
-      console.log(yWektorusia);
-      console.log(xWektorusia);
 
       //Usuwanie poleceń
       ListEl.addEventListener("click", (e) => {
