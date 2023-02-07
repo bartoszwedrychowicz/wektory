@@ -28,21 +28,24 @@ Jak przygotować?
     Makaron ugotuj al dente, podawaj go z sosem, serem, i bazylią.
 */
 
-const confirmBtn = document.getElementById("confirm");
-const startGameBtn = document.getElementById("start");
-const moves = document.getElementById("moves");
-const game = document.getElementById("game");
-const points = document.getElementById("points");
-const message = document.getElementById("message");
-const timer = document.getElementById("timer");
-const panel = document.getElementsByClassName("panel")[0];
-const startPos = document.getElementById(playerStartPos);
-const playerStartPos = 45;
-
-const coinCount = 7;
-let direction = document.getElementById("direction").value;
-let number = document.getElementById("number");
-let numberValue = parseInt(number.value);
+const constans = {
+  PLAYERSTARTINGPOSITION: 45,
+  COINNUMBER: 7,
+}
+const getById = {
+  confirmBtn: document.getElementById("confirm"), //Potwierdza wysyłanie wektora
+  startGameBtn: document.getElementById("start"), //Rozpoczyna rozgrywkę
+  movesList: document.getElementById("moves"), //Lista ruchów gracza ~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!(ino ruch) !!!!!!!!!!!!!!~~~~~~~~~~~~~~
+  points: document.getElementById("points"), //Punkty gracza
+  message: document.getElementById("message"), //Wiadomośc o końcu gry
+  timer: document.getElementById("timer"), // Zegarek
+  startPos: document.getElementById(constans.PLAYERSTARTINGPOSITION), //Pozycja początkowa wektorusia
+  number: document.getElementById("number"), // Formularz z długościom wektora
+  numberValue: parseInt(number.value), //Długość wektora
+  direction: document.getElementById("direction"), // Formukarz z kierunkiem wektora
+  directionValue: document.getElementById("direction").value, //Kierunek wektora
+  panel: document.getElementById("panel"), //Panel sterowania
+};
 
 // blokada wpisywania liczb ujemnych i 0
 number.oninput = function () {
@@ -54,11 +57,11 @@ number.oninput = function () {
 //Mechanika odczytywania polecen dla wektorusia
 const changeGameState = (state) => {
   if (state == 1) {
-    startGameBtn.disabled = true;
+    getById.startGameBtn.disabled = true;
 
     //Generowanie Coinów
-    const pointsCount = Math.floor(Math.random() * coinCount) + 1;
-    for (let i = 0; i < pointsCount; i++) {
+    let coinCount = Math.floor(Math.random() * constans.COINNUMBER) + 1;
+    for (let i = 0; i < coinCount; i++) {
       const imageEl = document.createElement("img");
       imageEl.src = "Assets/Textures/coin.png";
       imageEl.classList.add("coin");
@@ -76,56 +79,50 @@ const changeGameState = (state) => {
       let target = e.target;
       target.remove();
     });
-    startPos.appendChild(WektorusEl);
+    getById.startPos.appendChild(WektorusEl);
 
     // Dodawanie poleceń i usuwanie ich z listy
 
-    confirmBtn.disabled = false;
-    confirmBtn.addEventListener("click", () => {
-      if (numberValue <= 0 || numberValue == "" || isNaN(numberValue)) {
-        numberValue = 1;
+    getById.confirmBtn.disabled = false;
+    getById.confirmBtn.addEventListener("click", () => {
+      if (getById.numberValue <= 0 || getById.numberValue == "" || isNaN(getById.numberValue || getById.number >= 10)) {
+        getById.numberValue = 1;
       }
       const ListEl = document.createElement("li");
       const hrEl = document.createElement("hr");
       ListEl.classList.add("moves-list-item");
-      number.value = "";
+      
       //Spagheti code dla Gabrysia
-      switch (direction) {
+      switch (getById.directionValue) {
         case "1":
-          ListEl.innerText = numberValue + " 🡡";
+          ListEl.innerText = getById.numberValue + " 🡡";
           break;
         case "2":
-          ListEl.innerText = numberValue + " 🡥";
+          ListEl.innerText = getById.numberValue + " 🡥";
           break;
         case "3":
-          ListEl.innerText = numberValue + " 🡢";
+          ListEl.innerText = getById.numberValue + " 🡢";
           break;
         case "4":
-          ListEl.innerText = numberValue + " 🡦";
+          ListEl.innerText = getById.numberValue + " 🡦";
           break;
         case "5":
-          ListEl.innerText = numberValue + " 🡣";
+          ListEl.innerText = getById.numberValue + " 🡣";
           break;
         case "6":
-          ListEl.innerText = numberValue + " 🡧";
+          ListEl.innerText = getById.numberValue + " 🡧";
           break;
         case "7":
-          ListEl.innerText = numberValue + " 🡠";
+          ListEl.innerText = getById.numberValue + " 🡠";
           break;
         case "8":
-          ListEl.innerText = numberValue + " 🡤";
+          ListEl.innerText = getById.numberValue + " 🡤";
           break;
 
         default:
-          ListEl.innerText = numberValue + "🡡";
+          ListEl.innerText = getById.numberValue + "🡡";
           break;
       }
-      const player = document.getElementById("player")
-      const rodzicWektorusia = player.parentElement
-      const xWektorusia = rodzicWektorusia.dataset.row;
-      const yWektorusia = rodzicWektorusia.dataset.column;
-      console.log(yWektorusia);
-      console.log(xWektorusia);
 
       //Usuwanie poleceń
       ListEl.addEventListener("click", (e) => {
@@ -134,12 +131,13 @@ const changeGameState = (state) => {
       });
 
       ListEl.append(hrEl);
-      moves.appendChild(ListEl);
+      getById.movesList.appendChild(ListEl);
+      getById.directionValue = "";
     });
     let count = 100;
-    timer.innerText = count + " sekund pozostało";
-    timer.classList.remove("hide");
-    message.innerHTML = "";
+    getById.timer.innerText = count + " sekund pozostało";
+    getById.timer.classList.remove("hide");
+    getById.message.innerHTML = "";
     let playerPoints = 0;
     let counter = setInterval(() => {
       count = count - 1;
@@ -147,16 +145,16 @@ const changeGameState = (state) => {
         clearInterval(counter);
         return;
       } else if (count == 0) {
-        timer.classList.toggle("hide");
-        confirmBtn.disabled = true;
-        startGameBtn.disabled = false;
+        getById.timer.classList.toggle("hide");
+        getById.confirmBtn.disabled = true;
+        getById.startGameBtn.disabled = false;
         WektorusEl.dispatchEvent(killHimNow);
         const coins = document.querySelectorAll(".coin");
         for (i of coins) {
           i.remove();
         }
-        const movesList = document.querySelectorAll(".moves-list-item");
-        for(m of movesList){
+        const moves = document.querySelectorAll(".moves-list-item");
+        for (m of moves) {
           m.remove();
         }
         message.innerHTML =
