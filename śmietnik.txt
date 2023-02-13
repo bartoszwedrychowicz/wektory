@@ -1,0 +1,22 @@
+    //Generowanie Wektorusia
+    const WektorusEl = document.createElement("img");
+    WektorusEl.src = "Assets/Textures/wektorus.png";
+    WektorusEl.setAttribute("id", "player");
+    WektorusEl.classList.add("player");
+    const killHimNow = new Event("killhim");
+    WektorusEl.addEventListener("killhim", (e) => {
+      let target = e.target;
+      target.remove();
+    });
+    startPos.appendChild(WektorusEl);
+
+
+    //Generowanie Coinów
+    const pointsCount = Math.floor(Math.random() * coinCount) + 1;
+    for (let i = 0; i < pointsCount; i++) {
+      const imageEl = document.createElement("img");
+      imageEl.src = "Assets/Textures/coin.png";
+      imageEl.classList.add("coin");
+      let random = Math.floor(Math.random() * 100) + 1;
+      document.getElementById(random).appendChild(imageEl);
+    }
