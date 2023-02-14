@@ -187,6 +187,35 @@ input[type="number"] {
   border-radius: 1rem;
   overflow: hidden;
 }
+.panel-tutorial {
+  width: 95%;
+  height: 70vh;
+  border: #dddddd 5px solid;
+  margin: 2.4rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+ol{
+  font-size: 2rem;
+  margin-top: 30px;
+  list-style-type: lower-greek;
+  text-align: left;
+}
+ol li{
+  padding: 30px;
+
+}
+.panel-tutorial h3 {
+  padding: 2.6rem;
+  margin-top: 30px;
+  font-size: 5rem;
+  letter-spacing: 5px;
+  word-spacing: 30px;
+}
 
 .moves h3 {
   padding: 2.4rem;
