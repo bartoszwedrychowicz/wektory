@@ -16,44 +16,31 @@ Składniki
     oliwa z oliwek
     sól, pieprz
     świeża bazylia
-
-Jak przygotować?
-
+    
+    Jak przygotować?
+    
     Na głębokiej patelni rozgrzej około 2 łyżki oliwy z oliwek.
-
+    
     Na rozgrzaną patelnię wrzuć czosnek i cebulę, a po chwili dodaj mięso, rozdrabniaj je np. widelcem, tak aby nie powstały grube mięsne grudki.
-
+    
     Do mięsa dodaj zioła oraz koncentrat. Całość podgrzewaj przez chwilę, dodaj passatę (przecier pomidorowy), gotuj na małym ogniu około 30 minut.
-
+    
     Makaron ugotuj al dente, podawaj go z sosem, serem, i bazylią.
-*/
-const playerStartPos = 45;
+    */
+//Tworzenie pola gry
+
+createBoard();
+
 const confirmBtn = document.getElementById("confirm");
 const startGameBtn = document.getElementById("start");
 const moves = document.getElementById("moves");
-const game = document.getElementById("game");
 const message = document.getElementById("message");
 const timer = document.getElementById("timer");
 const panel = document.getElementsByClassName("panel")[0];
-const startPos = document.getElementById(playerStartPos);
+let players = document.getElementsByClassName("player");
 
-const coinCount = 7;
-let direction = document.getElementById("direction").value;
-let number = document.getElementById("number");
-let numberValue = parseInt(number.value);
-
-// blokada wpisywania liczb ujemnych i 0
-number.oninput = function () {
-  if (this.value <= 0) {
-    this.value = "";
-  }
-};
-
-const playerElements = [];
-let points;
-let gameOver = false;
-
-createBoard();
+const gridElements = document.querySelectorAll(".grid-item");
+const pointsCounter = document.getElementById("points");
 
 function createBoard() {
   const board = document.getElementById("board");
@@ -69,103 +56,157 @@ function createBoard() {
     }
   }
 }
+
+// blokada wpisywania liczb ujemnych i 0
+number.oninput = function () {
+  if (this.value <= 0) {
+    this.value = "";
+  }
+};
+
+// Funkcja do losowania liczb
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
 //Mechanika odczytywania polecen dla wektorusia
 const changeGameState = (state) => {
+  //Jeśli gra się rozpoczęła
   if (state == 1) {
-    startGameBtn.disabled = true;
+    startGameBtn.disabled = true; //Dezaktywacja przycisku "start"
 
     initPlayer();
+    generateCoins();
+
+    function generateCoins() {
+      let i;
+      let xPosition;
+      let yPosition;
+      do {
+        xPosition = getRandomInt(1, 10);
+        yPosition = getRandomInt(1, 10);
+        i++;
+      } while (i < 8);
+
+      let pointElement = document.querySelector(
+        `[data-x="${xPosition}"][data-y="${yPosition}"]`
+      );
+      pointElement.classList.add("coin");
+    }
+
+    //Tworzenie gracza
 
     function initPlayer() {
-      let xPlayerPosition = 5;
-      let yPlayerPosition = 5;
+      let xPlayerStartingPosition = 5;
+      let yPlayerStartingPosition = 5;
 
-      const playerElement = document.querySelector(
-        `[data-x="${xPlayerPosition}"][data-y="${yPlayerPosition}"]`
+      let playerElement = document.querySelector(
+        `[data-x="${xPlayerStartingPosition}"][data-y="${yPlayerStartingPosition}"]`
       );
       playerElement.classList.add("player");
     }
+
+    function GameOver(nothing) {
+      if (nothing == 2) {
+        const modal = document.getElementById("modal");
+        const gameMessage = document.getElementById("gameMessage");
+        gameMessage.innerText = "Czas upłynął!"
+        modal.classList.remove("hide");
+        clearInterval(counter);
+        timer.innerText = "";
+      }
+      else{
+        const modal = document.getElementById("modal");
+        modal.classList.remove("hide");
+        clearInterval(counter);
+        timer.innerText = "";
+      }
+    }
+
+    function movePlayer() {
+      const player = document.getElementsByClassName("player")[0];
+      const ListEl = document.createElement("li");
+      const hrEl = document.createElement("hr");
+      const direction = document.getElementById("direction").value;
+      const number = document.getElementById("number");
+      const numberValue = parseInt(number.value);
+      ListEl.classList.add("moves-list-item");
+
+      let xPlayerPosition = parseInt(player.dataset.x);
+      let yPlayerPosition = parseInt(player.dataset.y);
+      let playerElement;
+
+      const playerChange = (xCha, yCha, dir) => {
+        for (let i of players) {
+          i.classList.remove("player");
+        }
+        playerElement = document.querySelector(
+          `[data-x="${xPlayerPosition - xCha}"][data-y="${
+            yPlayerPosition - yCha
+          }"]`
+        );
+        if (playerElement == null || playerElement == undefined) GameOver();
+        playerElement.classList.add("player");
+        moves.appendChild(ListEl);
+        ListEl.innerText = numberValue + dir;
+        ListEl.append(hrEl);
+      };
+      switch (direction) {
+        case "1":
+          playerChange(0, numberValue, " 🡡");
+          break;
+        case "2":
+          playerChange(-numberValue, numberValue, " 🡥");
+          break;
+        case "3":
+          playerChange(-numberValue, 0, " 🡢");
+          break;
+        case "4":
+          playerChange(-numberValue, -numberValue, " 🡦");
+          break;
+        case "5":
+          playerChange(0, -numberValue, " 🡣");
+          break;
+        case "6":
+          playerChange(numberValue, -numberValue, " 🡧");
+          break;
+        case "7":
+          playerChange(numberValue, 0, " 🡠");
+          break;
+        case "8":
+          playerChange(numberValue, numberValue, " 🡤");
+          break;
+      }
+    }
   }
-  // Dodawanie poleceń i usuwanie ich z listy
 
   confirmBtn.disabled = false;
+  let playerPoints = 0;
   confirmBtn.addEventListener("click", () => {
-    const player = document.getElementsByClassName("player")[0];
-    console.log(player.dataset.y, player.dataset.x);
-    const direction = document.getElementById("direction").value;
-    let number = document.getElementById("number");
-    let numberValue = parseInt(number.value);
-    if (numberValue <= 0 || numberValue == "" || isNaN(numberValue)) {
-      numberValue = 1;
-    }
-    const ListEl = document.createElement("li");
-    const hrEl = document.createElement("hr");
-    ListEl.classList.add("moves-list-item");
-
-    //Spagheti code dla Gabrysia
-    switch (direction) {
-      case "1":
-        ListEl.innerText = numberValue + " 🡡";
-        yPlayerPosition + numberValue; //🡡
-        break;
-      case "2":
-        ListEl.innerText = numberValue + " 🡥";
-        yPlayerPosition + numberValue;
-        xPlayerPosition + numberValue; //🡥
-        break;
-      case "3":
-        ListEl.innerText = numberValue + " 🡢";
-        xPlayerPosition + numberValue; //🡢
-        break;
-      case "4":
-        ListEl.innerText = numberValue + " 🡦";
-        yPlayerPosition - numberValue;
-        xPlayerPosition + numberValue; //🡦"
-        break;
-      case "5":
-        ListEl.innerText = numberValue + " 🡣";
-        yPlayerPosition - numberValue; //🡣
-        break;
-      case "6":
-        ListEl.innerText = numberValue + " 🡧";
-        yPlayerPosition - numberValue;
-        xPlayerPosition - numberValue; // 🡧
-        break;
-      case "7":
-        ListEl.innerText = numberValue + " 🡠";
-        xPlayerPosition - numberValue; //🡠
-        break;
-      case "8":
-        ListEl.innerText = numberValue + " 🡤";
-        break;
-
-      default:
-        ListEl.innerText = numberValue + "🡡";
-        break;
-    }
-
-    //Usuwanie poleceń
-    ListEl.addEventListener("click", (e) => {
-      let target = e.target;
-      target.remove();
+    movePlayer();
+    gridElements.forEach((item) => {
+      if (
+        item.classList.contains("player") &&
+        item.classList.contains("coin")
+      ) {
+        item.classList.remove("coin");
+        ++playerPoints;
+        pointsCounter.innerText = playerPoints;
+        generateCoins();
+      }
     });
-
-    ListEl.append(hrEl);
-    moves.appendChild(ListEl);
   });
 
-  let count = 100;
+  //zegarek
+  let count = 100; //liczba sekund
   timer.innerText = count + " sekund pozostało";
   timer.classList.remove("hide");
   message.innerHTML = "";
-  let playerPoints = 0;
   let counter = setInterval(() => {
     count = count - 1;
     if (count < 0) {
       clearInterval(counter);
+      GameOver(2);
       return;
     } else if (count == 0) {
       timer.classList.toggle("hide");

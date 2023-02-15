@@ -6,6 +6,7 @@ body {
   width: 100vw;
   font-family: "Rubik", sans-serif;
   user-select: none;
+  overflow-x: hidden;
 }
 /* usunięcie strzałek przy inpucie(number) */
 /* Chrome, Safari, Edge, Opera */
@@ -126,7 +127,7 @@ input[type="number"] {
   grid-template-rows: repeat(10, 1fr);
 }
 
-.grid-item { 
+.grid-item {
   border: 1px solid black;
   width: 65px;
   height: 65px;
@@ -138,15 +139,18 @@ input[type="number"] {
 }
 
 .coin {
-  width: 90%;
-  height: 90%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  display: grid;
-  place-items: center;
+  background-repeat: no-repeat;
+  border: 1px solid black;
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  position: relative;
+  text-align: left;
+  background-color: #1452d5;
+  object-fit: contain;
+  background-position: center;
+  background-size: contain;
+  background-image: url("../Textures/coin.png");
 }
 
 /* .grid-item:has(.player){
@@ -187,11 +191,24 @@ input[type="number"] {
   border-radius: 1rem;
   overflow: hidden;
 }
+
+.moves ul {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tutorial-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .panel-tutorial {
-  width: 95%;
-  height: 70vh;
+  background-attachment: scroll;
+  opacity: 0.7;
+  background: white;
+  margin-top: 2rem;
+  width: 60vw;
   border: #dddddd 5px solid;
-  margin: 2.4rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -199,22 +216,19 @@ input[type="number"] {
   border-radius: 1rem;
   overflow: hidden;
 }
-ol{
-  font-size: 2rem;
+ol {
   margin-top: 30px;
   list-style-type: lower-greek;
-  text-align: left;
 }
-ol li{
+ol li {
   padding: 30px;
-
 }
 .panel-tutorial h3 {
   padding: 2.6rem;
   margin-top: 30px;
-  font-size: 5rem;
+  font-size: 2rem;
   letter-spacing: 5px;
-  word-spacing: 30px;
+  word-spacing: 20px;
 }
 
 .moves h3 {
@@ -372,4 +386,27 @@ select {
 
 .hide {
   visibility: hidden;
+}
+
+.modal {
+  width: 30vw;
+  height: 20vh;
+  background-color: white;
+  border: #dddddd solid 5px;
+  position: absolute;
+  z-index: 19;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 0px 1px 1000px rgba(0, 0, 0,0.8);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal h3{
+  display: flex;
+  font-size: 2rem;
 }
